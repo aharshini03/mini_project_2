@@ -17,16 +17,19 @@ rf_model, scaler, selected_features, encoders = load_artifacts()
 # --- App title ---
 st.title("🧬 Cancer DSS Prediction (Mini-1)")
 st.write("""
-Upload all 5 Mini-1 CSV files (BRCA, CHOL, OV, PAAD, STAD). 
-The DSS will merge them, preprocess features, and predict cancer types.
+Upload the CSV files for each cancer type. 
+The DSS will merge them, preprocess features, and predict cancer types using the pre-trained Random Forest model.
 """)
 
 # --- Upload files ---
 uploaded_files = st.file_uploader(
-    "Upload the 5 Mini-1 CSV files", type="csv", accept_multiple_files=True
+    "Upload CSV files (BRCA, CHOL, OV, PAAD, STAD)", 
+    type="csv", 
+    accept_multiple_files=True
 )
 
 if uploaded_files:
+    # Combine all uploaded files
     dfs = [pd.read_csv(f) for f in uploaded_files]
     df = pd.concat(dfs, ignore_index=True)
     st.write("✅ Combined dataset preview:")
@@ -56,6 +59,6 @@ if uploaded_files:
     st.download_button(
         label="📥 Download Predictions CSV",
         data=csv,
-        file_name="mini1_predictions.csv",
+        file_name="predictions.csv",
         mime="text/csv"
     )
